@@ -5,14 +5,11 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-  ToolSchema,
   CallToolRequest,
   CallToolResult,
 } from '@modelcontextprotocol/sdk/types.js';
 import { Command } from 'commander';
 import axios, { AxiosInstance } from 'axios';
-import SwaggerParser from 'swagger-parser';
-import * as $RefParser from 'swagger-parser';
 const swaggerParser = require('swagger-parser');
 import https from 'https';
 
@@ -92,7 +89,7 @@ class SwaggerMCPServer {
   private async callApiTool(tool: SwaggerTool, args: any): Promise<CallToolResult> {
     try {
       // Build the URL with path parameters
-      let url = this.buildUrl(tool.path, args);
+      const url = this.buildUrl(tool.path, args);
       
       // Extract query parameters
       const queryParams: any = {};

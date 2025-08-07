@@ -14,6 +14,12 @@ An MCP (Model Context Protocol) server that automatically converts REST APIs wit
 
 ## Installation
 
+### Global Installation
+
+```bash
+npm install -g mcp-swagger
+```
+
 ### From Source
 
 ```bash
@@ -21,12 +27,6 @@ git clone https://github.com/HainanZhao/mcp-swagger.git
 cd mcp-swagger
 npm install
 npm run build
-```
-
-### Global Installation
-
-```bash
-npm install -g mcp-swagger
 ```
 
 ## Usage
@@ -52,13 +52,13 @@ Options:
 #### Load from URL with custom prefix
 
 ```bash
-mcp-swagger --swagger-url https://api.example.com/swagger.json --tool-prefix myapi --ignore-ssl
+mcp-swagger --swagger-url https://api.example.com/swagger.json --tool-prefix example --ignore-ssl
 ```
 
 #### Load from local file
 
 ```bash
-mcp-swagger --swagger-file ./api-docs.json --tool-prefix infra
+mcp-swagger --swagger-file ./api-docs.json --tool-prefix local-api
 ```
 
 #### With authentication
@@ -184,8 +184,8 @@ The server has been tested with the following sample swagger document structure:
 ```
 
 This would generate tools like:
-- `infra_get_v1_hosts` - List hosts with optional filtering
-- `infra_get_v1_hosts_by_name` - Get specific host by name
+- `example_get_v1_hosts` - List hosts with optional filtering
+- `example_get_v1_hosts_by_name` - Get specific host by name
 
 ## Error Handling
 
@@ -209,7 +209,7 @@ npm run build
 
 ```bash
 # Test with sample swagger file
-node test-server.js
+npm run test
 ```
 
 ### Linting
