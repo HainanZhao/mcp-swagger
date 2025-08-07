@@ -134,6 +134,10 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
+# Test files
+test-swagger.json
+test-*.js
+
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
