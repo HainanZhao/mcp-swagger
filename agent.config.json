@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "swagger-api": {
+      "command": "mcp-swagger",
+      "args": [
+        "--swagger-url",
+        "https://example.com/swagger.json",
+        "--tool-prefix",
+        "myapi",
+        "--ignore-ssl",
+        "--auth-header",
+        "Bearer token"
+      ]
+    },
+    "local-swagger": {
+      "command": "mcp-swagger",
+      "args": [
+        "--swagger-file",
+        "/path/to/swagger.json",
+        "--tool-prefix",
+        "local",
+        "--base-url",
+        "http://localhost:8080"
+      ]
+    }
+  }
+}

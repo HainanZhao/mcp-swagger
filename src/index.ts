@@ -160,7 +160,21 @@ class SwaggerMCPServer {
 
     // Combine with base URL
     const baseUrl = this.config.baseUrl || this.getBaseUrlFromSwagger();
-    return new URL(url, baseUrl).toString();
+    
+    // Properly join base URL and path
+    // If path starts with /, we need to append it to the base URL
+    // rather than using URL constructor which would replace the base path
+    if (url.startsWith('/')) {
+      const baseUrlObj = new URL(baseUrl);
+      // Ensure base path ends with / and remove leading / from url to avoid double /
+      const basePath = baseUrlObj.pathname.endsWith('/') ? baseUrlObj.pathname : baseUrlObj.pathname + '/';
+      const cleanPath = url.startsWith('/') ? url.substring(1) : url;
+      baseUrlObj.pathname = basePath + cleanPath;
+      return baseUrlObj.toString();
+    } else {
+      // For relative paths, use URL constructor as before
+      return new URL(url, baseUrl).toString();
+    }
   }
 
   private getBaseUrlFromSwagger(): string {

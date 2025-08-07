@@ -88,9 +88,7 @@ The server can be configured through command-line arguments or environment varia
 
 ## MCP Integration
 
-### Claude Desktop
-
-Add to your Claude Desktop configuration (`claude_desktop_config.json`):
+Add to your Agent configuration (e.g. `claude_desktop_config.json` or `~/.gemini/settings.json`):
 
 ```json
 {
@@ -98,8 +96,8 @@ Add to your Claude Desktop configuration (`claude_desktop_config.json`):
     "swagger-api": {
       "command": "mcp-swagger",
       "args": [
-        "--swagger-url", "https://your-api.com/swagger.json",
-        "--tool-prefix", "myapi",
+        "--swagger-url", "https://example.com/swagger.json",
+        "--tool-prefix", "example",
         "--ignore-ssl"
       ]
     }
