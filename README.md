@@ -81,10 +81,45 @@ The server can be configured through command-line arguments or environment varia
 |------------|---------------------|-------------|
 | `--swagger-url` | `SWAGGER_URL` | URL to swagger documentation |
 | `--swagger-file` | `SWAGGER_FILE` | Path to local swagger file |
-| `--tool-prefix` | `TOOL_PREFIX` | Custom prefix for generated tools |
-| `--base-url` | `BASE_URL` | Override base URL for API calls |
-| `--ignore-ssl` | `IGNORE_SSL=true` | Ignore SSL certificate errors |
-| `--auth-header` | `AUTH_HEADER` | Authentication header |
+| `--tool-prefix` | `SWAGGER_TOOL_PREFIX` | Custom prefix for generated tools |
+| `--base-url` | `SWAGGER_BASE_URL` | Override base URL for API calls |
+| `--ignore-ssl` | `SWAGGER_IGNORE_SSL=true` | Ignore SSL certificate errors |
+| `--auth-header` | `SWAGGER_AUTH_HEADER` | Authentication header |
+
+### Using Environment Variables
+
+You can set environment variables to avoid passing command-line arguments repeatedly:
+
+```bash
+# Set environment variables
+export SWAGGER_URL="https://api.example.com/swagger.json"
+export SWAGGER_TOOL_PREFIX="myapi"
+export SWAGGER_BASE_URL="https://staging.api.com"
+export SWAGGER_IGNORE_SSL="true"
+export SWAGGER_AUTH_HEADER="Bearer your-token-here"
+
+# Run the server (will use environment variables)
+mcp-swagger
+```
+
+### Environment Variables in MCP Configuration
+
+You can also use environment variables in your MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "swagger-api": {
+      "command": "mcp-swagger",
+      "env": {
+        "SWAGGER_URL": "https://example.com/swagger.json",
+        "SWAGGER_TOOL_PREFIX": "example",
+        "SWAGGER_IGNORE_SSL": "true"
+      }
+    }
+  }
+}
+```
 
 ## MCP Integration
 
