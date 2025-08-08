@@ -3,7 +3,7 @@
     "swagger-api": {
       "command": "mcp-swagger",
       "args": [
-        "--swagger-url",
+        "--doc-url",
         "https://example.com/swagger.json",
         "--tool-prefix",
         "myapi",
@@ -15,7 +15,7 @@
     "local-swagger": {
       "command": "mcp-swagger",
       "args": [
-        "--swagger-file",
+        "--doc-file",
         "/path/to/swagger.json",
         "--tool-prefix",
         "local",

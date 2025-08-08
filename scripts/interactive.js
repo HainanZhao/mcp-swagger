@@ -17,7 +17,7 @@ const rl = readline.createInterface({
 const config =  {
   args: [
     'dist/index.js',
-    '--swagger-url', 'https://petstore.swagger.io/v2/swagger.json',
+    '--doc-url', 'https://petstore.swagger.io/v2/swagger.json',
     '--tool-prefix', 'petstore'
   ]
 };

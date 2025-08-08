@@ -40,7 +40,7 @@ function testMCPServer() {
   return new Promise((resolve) => {
     const server = spawn('node', [
       'dist/index.js',
-      '--swagger-url', 'https://petstore.swagger.io/v2/swagger.json',
+      '--doc-url', 'https://petstore.swagger.io/v2/swagger.json',
       '--tool-prefix', 'petstore',
       '--base-url', 'https://petstore.swagger.io/v2'
     ], {

@@ -14,8 +14,8 @@ const swaggerParser = require('swagger-parser');
 import https from 'https';
 
 interface ServerConfig {
-  swaggerUrl?: string;
-  swaggerFile?: string;
+  docUrl?: string;
+  docFile?: string;
   toolPrefix?: string;
   baseUrl?: string;
   ignoreSsl: boolean;
@@ -190,13 +190,13 @@ class SwaggerMCPServer {
     try {
       let swaggerDoc: any;
 
-      if (this.config.swaggerUrl) {
-        console.error(`Loading swagger from URL: ${this.config.swaggerUrl}`);
-        const response = await this.httpClient.get(this.config.swaggerUrl);
+      if (this.config.docUrl) {
+        console.error(`Loading swagger from URL: ${this.config.docUrl}`);
+        const response = await this.httpClient.get(this.config.docUrl);
         swaggerDoc = response.data;
-      } else if (this.config.swaggerFile) {
-        console.error(`Loading swagger from file: ${this.config.swaggerFile}`);
-        swaggerDoc = await swaggerParser.parse(this.config.swaggerFile);
+      } else if (this.config.docFile) {
+        console.error(`Loading swagger from file: ${this.config.docFile}`);
+        swaggerDoc = await swaggerParser.parse(this.config.docFile);
       } else {
         throw new Error('Either swaggerUrl or swaggerFile must be provided');
       }
@@ -313,8 +313,8 @@ async function main(): Promise<void> {
     .name('mcp-swagger')
     .description('MCP server that converts REST APIs with Swagger documentation into MCP tools')
     .version('1.0.0')
-    .option('-u, --swagger-url <url>', 'URL to swagger documentation', process.env.SWAGGER_URL)
-    .option('-f, --swagger-file <file>', 'Path to local swagger file', process.env.SWAGGER_FILE)
+    .option('-u, --doc-url <url>', 'URL to swagger documentation', process.env.SWAGGER_DOC_URL)
+    .option('-f, --doc-file <file>', 'Path to local swagger file', process.env.SWAGGER_DOC_FILE)
     .option('-p, --tool-prefix <prefix>', 'Custom prefix for generated tools', process.env.SWAGGER_TOOL_PREFIX)
     .option('-b, --base-url <url>', 'Override base URL for API calls', process.env.SWAGGER_BASE_URL)
     .option('--ignore-ssl', 'Ignore SSL certificate errors', process.env.SWAGGER_IGNORE_SSL === 'true')
@@ -323,14 +323,14 @@ async function main(): Promise<void> {
 
   const options = program.opts();
 
-  if (!options.swaggerUrl && !options.swaggerFile) {
-    console.error('Error: Either --swagger-url or --swagger-file must be provided');
+  if (!options.docUrl && !options.docFile) {
+    console.error('Error: Either --doc-url or --doc-file must be provided');
     process.exit(1);
   }
 
   const config: ServerConfig = {
-    swaggerUrl: options.swaggerUrl,
-    swaggerFile: options.swaggerFile,
+    docUrl: options.docUrl,
+    docFile: options.docFile,
     toolPrefix: options.toolPrefix,
     baseUrl: options.baseUrl,
     ignoreSsl: options.ignoreSsl,
