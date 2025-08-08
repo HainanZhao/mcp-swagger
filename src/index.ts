@@ -313,7 +313,9 @@ async function main(): Promise<void> {
     .name('mcp-swagger')
     .description('MCP server that converts REST APIs with Swagger documentation into MCP tools')
     .version('1.0.0')
+    .option('-u, --swagger-url <url>', 'URL to swagger documentation', process.env.SWAGGER_DOC_URL)
     .option('-u, --doc-url <url>', 'URL to swagger documentation', process.env.SWAGGER_DOC_URL)
+    .option('-f, --swagger-file <file>', 'Path to local swagger file', process.env.SWAGGER_DOC_FILE)
     .option('-f, --doc-file <file>', 'Path to local swagger file', process.env.SWAGGER_DOC_FILE)
     .option('-p, --tool-prefix <prefix>', 'Custom prefix for generated tools', process.env.SWAGGER_TOOL_PREFIX)
     .option('-b, --base-url <url>', 'Override base URL for API calls', process.env.SWAGGER_BASE_URL)
@@ -323,14 +325,14 @@ async function main(): Promise<void> {
 
   const options = program.opts();
 
-  if (!options.docUrl && !options.docFile) {
+  if (!options.docUrl && !options.docFile && !options.swaggerUrl && !options.swaggerFile) {
     console.error('Error: Either --doc-url or --doc-file must be provided');
     process.exit(1);
   }
 
   const config: ServerConfig = {
-    docUrl: options.docUrl,
-    docFile: options.docFile,
+    docUrl: options.docUrl || options.swaggerUrl,
+    docFile: options.docFile || options.swaggerFile,
     toolPrefix: options.toolPrefix,
     baseUrl: options.baseUrl,
     ignoreSsl: options.ignoreSsl,
