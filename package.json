@@ -13,7 +13,8 @@
     "lint": "eslint src/**/*.ts",
     "test": "npm run build && node scripts/test-mcp.js",
     "test:interactive": "npm run build && node scripts/interactive.js",
-    "test:tools": "npm run build && node scripts/test-tools.js"
+    "test:tools": "npm run build && node scripts/test-tools.js",
+    "test:env": "npm run build && node scripts/test-env.js"
   },
   "keywords": [
     "mcp",

@@ -313,12 +313,12 @@ async function main(): Promise<void> {
     .name('mcp-swagger')
     .description('MCP server that converts REST APIs with Swagger documentation into MCP tools')
     .version('1.0.0')
-    .option('-u, --swagger-url <url>', 'URL to swagger documentation')
-    .option('-f, --swagger-file <file>', 'Path to local swagger file')
-    .option('-p, --tool-prefix <prefix>', 'Custom prefix for generated tools')
-    .option('-b, --base-url <url>', 'Override base URL for API calls')
-    .option('--ignore-ssl', 'Ignore SSL certificate errors', false)
-    .option('-a, --auth-header <header>', 'Authentication header (e.g., "Bearer token")')
+    .option('-u, --swagger-url <url>', 'URL to swagger documentation', process.env.SWAGGER_URL)
+    .option('-f, --swagger-file <file>', 'Path to local swagger file', process.env.SWAGGER_FILE)
+    .option('-p, --tool-prefix <prefix>', 'Custom prefix for generated tools', process.env.SWAGGER_TOOL_PREFIX)
+    .option('-b, --base-url <url>', 'Override base URL for API calls', process.env.SWAGGER_BASE_URL)
+    .option('--ignore-ssl', 'Ignore SSL certificate errors', process.env.SWAGGER_IGNORE_SSL === 'true')
+    .option('-a, --auth-header <header>', 'Authentication header (e.g., "Bearer token")', process.env.SWAGGER_AUTH_HEADER)
     .parse();
 
   const options = program.opts();
