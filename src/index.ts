@@ -88,10 +88,8 @@ class SwaggerMCPServer {
 
   private async callApiTool(tool: SwaggerTool, args: any): Promise<CallToolResult> {
     try {
-      // Build the URL with path parameters
       const url = this.buildUrl(tool.path, args);
       
-      // Extract query parameters
       const queryParams: any = {};
       const bodyData: any = {};
       
@@ -104,10 +102,18 @@ class SwaggerMCPServer {
             case 'body':
               Object.assign(bodyData, args[param.name]);
               break;
-            // path parameters are already handled in buildUrl
           }
         }
       });
+
+      if (['POST', 'PUT', 'PATCH'].includes(tool.method)) {
+        const paramNames = tool.parameters.map(p => p.name);
+        Object.keys(args).forEach(key => {
+          if (!paramNames.includes(key)) {
+            bodyData[key] = args[key];
+          }
+        });
+      }
 
       const requestConfig: any = {
         method: tool.method,
@@ -265,6 +271,27 @@ class SwaggerMCPServer {
       }
     });
 
+    if (operation.requestBody?.content?.['application/json']?.schema) {
+      const bodySchema = operation.requestBody.content['application/json'].schema;
+      
+      if (bodySchema.properties) {
+        Object.entries(bodySchema.properties).forEach(([propName, propSchema]: [string, any]) => {
+          properties[propName] = {
+            type: this.mapSwaggerType(propSchema.type || 'string'),
+            description: propSchema.description || `${propName} property`,
+          };
+        });
+        
+        if (bodySchema.required && Array.isArray(bodySchema.required)) {
+          bodySchema.required.forEach((reqField: string) => {
+            if (!required.includes(reqField)) {
+              required.push(reqField);
+            }
+          });
+        }
+      }
+    }
+
     return {
       name,
       description: operation.summary || operation.description || `${method.toUpperCase()} ${path}`,
@@ -313,10 +340,8 @@ async function main(): Promise<void> {
     .name('mcp-swagger')
     .description('MCP server that converts REST APIs with Swagger documentation into MCP tools')
     .version('1.0.0')
-    .option('-u, --swagger-url <url>', 'URL to swagger documentation', process.env.SWAGGER_DOC_URL)
-    .option('-u, --doc-url <url>', 'URL to swagger documentation', process.env.SWAGGER_DOC_URL)
-    .option('-f, --swagger-file <file>', 'Path to local swagger file', process.env.SWAGGER_DOC_FILE)
-    .option('-f, --doc-file <file>', 'Path to local swagger file', process.env.SWAGGER_DOC_FILE)
+    .option('-u, --doc-url <url>', 'URL to swagger/openapi documentation', process.env.SWAGGER_DOC_URL)
+    .option('-f, --doc-file <file>', 'Path to local swagger/openapi file', process.env.SWAGGER_DOC_FILE)
     .option('-p, --tool-prefix <prefix>', 'Custom prefix for generated tools', process.env.SWAGGER_TOOL_PREFIX)
     .option('-b, --base-url <url>', 'Override base URL for API calls', process.env.SWAGGER_BASE_URL)
     .option('--ignore-ssl', 'Ignore SSL certificate errors', process.env.SWAGGER_IGNORE_SSL === 'true')
@@ -325,14 +350,14 @@ async function main(): Promise<void> {
 
   const options = program.opts();
 
-  if (!options.docUrl && !options.docFile && !options.swaggerUrl && !options.swaggerFile) {
+  if (!options.docUrl && !options.docFile) {
     console.error('Error: Either --doc-url or --doc-file must be provided');
     process.exit(1);
   }
 
   const config: ServerConfig = {
-    docUrl: options.docUrl || options.swaggerUrl,
-    docFile: options.docFile || options.swaggerFile,
+    docUrl: options.docUrl,
+    docFile: options.docFile,
     toolPrefix: options.toolPrefix,
     baseUrl: options.baseUrl,
     ignoreSsl: options.ignoreSsl,
